@@ -1,0 +1,63 @@
+// {
+//     "configurations": [
+//         {
+//             "name": "C/C++: g++.exe 활성 파일 빌드 및 디버그",
+//             "type": "cppdbg",
+//             "request": "launch",
+//             "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+//             "args": [],
+//             "stopAtEntry": false,
+//             "cwd": "C:/msys64/mingw64/bin",
+//             "environment": [],
+//             "externalConsole": false,
+//             "MIMode": "gdb",
+//             "miDebuggerPath": "C:\\msys64\\mingw64\\bin\\gdb.exe",
+//             "setupCommands": [
+//                 {
+//                     "description": "gdb에 자동 서식 지정 사용",
+//                     "text": "-enable-pretty-printing",
+//                     "ignoreFailures": true
+//                 },
+//                 {
+//                     "description": "디스어셈블리 버전을 Intel(으)로 설정",
+//                     "text": "-gdb-set disassembly-flavor intel",
+//                     "ignoreFailures": true
+//                 }
+//             ],
+//             "logging": {
+//                 "engineLogging": false, // 디버거 엔진 로깅 비활성화
+//                 "trace": false,         // 디버거 추적 비활성화
+//                 "traceResponse": false  // 디버거 응답 로깅 비활성화
+//             },
+//             "preLaunchTask": "C/C++: g++.exe 활성 파일 빌드"
+//         }
+//     ],
+//     "version": "2.0.0"
+// }
+{
+    "version": "2.0.0",
+    "configurations": [
+      {
+        "name": "🧠 스마트 디버그 (활성 파일 기준)",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${fileDirname}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
+        "setupCommands": [
+          {
+            "description": "gdb에 자동 서식 지정 사용",
+            "text": "-enable-pretty-printing",
+            "ignoreFailures": true
+          }
+        ],
+        "preLaunchTask": "🛠 스마트 빌드 (활성 파일)"
+      }
+    ]
+  }
+  

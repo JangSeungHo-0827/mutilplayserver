@@ -1,0 +1,56 @@
+// {
+//     "tasks": [
+//         {
+//             "type": "cppbuild",
+//             "label": "C/C++: g++.exe 활성 파일 빌드",
+//             "command": "C:/msys64/mingw64/bin/g++.exe",
+//             "args": [
+//                 "-fdiagnostics-color=always",
+//                 "-g",
+//                 "${file}",
+//                 "-o",
+//                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
+//             ],
+//             "options": {
+//                 "cwd": "C:/msys64/mingw64/bin"
+//             },
+//             "problemMatcher": [
+//                 "$gcc"
+//             ],
+//             "group": {
+//                 "kind": "build",
+//                 "isDefault": true
+//             },
+//             "detail": "디버거에서 생성된 작업입니다."
+//         }
+//     ],
+//     "version": "2.0.0"
+// }
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "type": "cppbuild",
+        "label": "🛠 스마트 빌드 (활성 파일)",
+        "command": "C:/msys64/mingw64/bin/g++.exe",
+        "args": [
+          "-fdiagnostics-color=always",
+          "-g",
+          "${file}",
+          "-o",
+          "${fileDirname}\\${fileBasenameNoExtension}.exe",
+          "-lws2_32"
+        ],
+        "options": {
+          "cwd": "${fileDirname}"
+        },
+        "problemMatcher": ["$gcc"],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "detail": "활성 파일을 기반으로 자동 빌드합니다"
+      }
+    ]
+  }
+  
