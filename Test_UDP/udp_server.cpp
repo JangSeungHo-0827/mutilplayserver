@@ -4,6 +4,10 @@
 #pragma comment(lib, "ws2_32.lib")
 
 int main() {
+    
+    SetConsoleOutputCP(CP_UTF8); // 콘솔 출력 문자셋 UTF-8 설정
+    SetConsoleCP(CP_UTF8);       // 콘솔 입력 문자셋도 (필요시)
+    
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0) {
         std::cerr << "WSAStartup 실패\n";

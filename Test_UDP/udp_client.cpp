@@ -26,7 +26,7 @@ int main() {
 
     std::cout << "UDP 서버에 데이터 전송 시작...\n";
 
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 20; ++i) {
         sendto(clientSocket, "ABC", 3, 0, (sockaddr*)&serverAddr, sizeof(serverAddr));
         std::cout << "📤 데이터 전송: ABC\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
