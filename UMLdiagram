@@ -1,0 +1,114 @@
+classDiagram
+    direction LR %% 다이어그램 방향을 왼쪽에서 오른쪽으로 설정합니다.
+
+    %% ==============================================
+    %% 언리얼 엔진 기본 클래스 및 컴포넌트 (Simplified)
+    %% ==============================================
+
+    class ACharacter {
+        %% ACharacter: 언리얼 엔진 제공 기본 캐릭터 클래스.
+        %% 선언은 GameFramework/Character.h.
+        %% AMyCharacter가 이 헤더를 포함하여 상속.
+        <<Unreal Engine Base>>
+        +SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) %% 입력 컴포넌트 설정 함수 (선언부). 자식 클래스에서 재정의.
+        +GetLifetimeReplicatedProps(TArray~FLifetimeProperty~& OutLifetimeProps) const %% 변수 복제 설정 함수 (선언부).
+        +Tick(float DeltaTime) %% 매 프레임 호출 함수 (선언부).
+        +Jump() %% 점프 기능 함수 (선언부).
+        +AddMovementInput(FVector WorldDirection, float ScaleValue, bool bForce) %% 이동 입력 추가 함수 (선언부).
+        +AddControllerYawInput(float Val) %% Yaw 회전 입력 추가 함수 (선언부).
+        +AddControllerPitchInput(float Val) %% Pitch 회전 입력 추가 함수 (선언부).
+    }
+
+    class APlayerController {
+        %% APlayerController: 언리얼 엔진 제공 기본 플레이어 컨트롤러 클래스.
+        %% 선언은 GameFramework/PlayerController.h.
+        %% AMyPlayerController가 이 헤더를 포함하여 상속.
+        <<Unreal Engine Base>>
+        +OnPossess(APawn* InPawn) %% Pawn 빙의 시 호출 함수 (선언부).
+        +IsLocalController() bool %% 로컬 컨트롤러 확인 함수 (선언부).
+        +SetInputMode(const FInputModeDataBase& InData) %% 입력 모드 설정 함수 (선언부).
+    }
+
+    class UActorComponent {
+        %% UActorComponent: 액터 컴포넌트의 기본 클래스.
+        %% 선언은 Components/ActorComponent.h.
+        <<Unreal Engine Component Base>>
+    }
+
+    class USceneComponent {
+        %% USceneComponent: 트랜스폼을 가지는 액터 컴포넌트.
+        %% 선언은 Components/SceneComponent.h.
+        <<Unreal Engine Component>>
+    }
+    USceneComponent --|> UActorComponent
+    %% USceneComponent가 UActorComponent를 상속. (.h 파일에 "public UActorComponent" 선언, UActorComponent.h 포함 필요)
+
+    class USpringArmComponent {
+        %% USpringArmComponent: 카메라 암 역할을 하는 씬 컴포넌트.
+        %% 선언은 GameFramework/SpringArmComponent.h.
+        <<Unreal Engine Component>>
+        +TargetArmLength : float %% 스프링 암 목표 길이 (.h 멤버 변수 선언).
+        +bUsePawnControlRotation : bool %% Pawn 컨트롤 회전 사용 여부 (.h 멤버 변수 선언).
+    }
+    USpringArmComponent --|> USceneComponent
+    %% USpringArmComponent가 USceneComponent를 상속. (.h 파일에 "public USceneComponent" 선언, USceneComponent.h 포함 필요)
+
+    class UCameraComponent {
+        %% UCameraComponent: 시점을 제공하는 카메라 컴포넌트.
+        %% 선언은 Camera/CameraComponent.h.
+        <<Unreal Engine Component>>
+        +bUsePawnControlRotation : bool %% Pawn 컨트롤 회전을 카메라에 적용할지 여부 (.h 멤버 변수 선언).
+    }
+    UCameraComponent --|> USceneComponent
+    %% UCameraComponent가 USceneComponent를 상속. (.h 파일에 "public USceneComponent" 선언, USceneComponent.h 포함 필요)
+
+
+    %% ==============================================
+    %% 사용자 정의 클래스 (Custom Classes)
+    %% ==============================================
+
+    class AMyCharacter {
+        %% AMyCharacter: 사용자 정의 커스텀 캐릭터 클래스.
+        %% MyCharacter.h 파일에 "class YOURPROJECT_API AMyCharacter : public ACharacter { ... };" 형태로 클래스 정의 시작.
+        <<Custom Character>>
+        +ReplicatedTransform : FTransform %% 캐릭터 위치/회전 동기화용 변수 (.h 선언). <<UPROPERTY ReplicatedUsing=OnRep_ReplicatedTransform>> (복제 방식 지정).
+        +ClientSmoothSpeed : float %% 클라이언트 측 부드러운 이동 속도 (.h 선언). <<UPROPERTY EditAnywhere>> (에디터 수정 가능).
+        +CameraBoom : USpringArmComponent* %% 카메라 암 컴포넌트 포인터 (.h 선언). <<VisibleAnywhere>> (에디터 확인 가능).
+        +FollowCamera : UCameraComponent* %% 팔로우 카메라 컴포넌트 포인터 (.h 선언).
+        -LastSentTransform : FTransform %% 마지막 전송 트랜스폼 (private .h 선언).
+        -TransformSendInterval : float %% 트랜스폼 전송 주기 (private .h 선언).
+        -TransformSendTimer : float %% 트랜스폼 전송 타이머 (private .h 선언).
+
+        +AMyCharacter() %% 생성자 함수 (.h 선언). 객체 초기화.
+        #BeginPlay() : void %% 게임 시작 시 호출 함수 (protected .h 선언).
+        +Tick(DeltaTime : float) : void %% 매 프레임 호출 함수 (.h 선언).
+        +SetupPlayerInputComponent(PlayerInputComponent : UInputComponent*) : void %% 플레이어 입력 설정 함수 (.h 선언). (UInputComponent.h 포함 또는 전방 선언 필요)
+        +GetLifetimeReplicatedProps(OutLifetimeProps : TArray~FLifetimeProperty~&) : void const %% 변수 복제 설정 함수 (.h 선언).
+        +LookUp(Value : float) : void %% 상하 바라보기 입력 처리 함수 (.h 선언).
+        +Turn(Value : float) : void %% 좌우 회전 입력 처리 함수 (.h 선언).
+        +MoveForward(Value : float) : void %% 앞뒤 이동 입력 처리 함수 (.h 선언).
+        +MoveRight(Value : float) : void %% 좌우 이동 입력 처리 함수 (.h 선언).
+        #Server_UpdateTransform(NewLocation : FVector, NewRotation : FRotator) : void %% 클라이언트->서버 위치 전송 RPC (.h 선언). <<UFUNCTION Server Reliable>> (서버 실행, 신뢰성 RPC).
+        #OnRep_ReplicatedTransform() : void %% ReplicatedTransform 복제 완료 시 콜백 함수 (.h 선언). <<UFUNCTION>> (리플렉션 노출).
+    }
+    AMyCharacter --|> ACharacter
+    %% AMyCharacter가 ACharacter를 상속. (MyCharacter.h에 "public ACharacter" 선언, GameFramework/Character.h 포함 필요)
+    AMyCharacter "1" *-- "1" USpringArmComponent : CameraBoom
+    %% AMyCharacter가 USpringArmComponent를 'CameraBoom'으로 소유. (MyCharacter.h에 USpringArmComponent* CameraBoom; 선언, 관련 .h 포함 또는 전방 선언 필요)
+    AMyCharacter "1" *-- "1" UCameraComponent : FollowCamera
+    %% AMyCharacter가 UCameraComponent를 'FollowCamera'로 소유. (MyCharacter.h에 UCameraComponent* FollowCamera; 선언, 관련 .h 포함 또는 전방 선언 필요)
+
+
+    class AMyPlayerController {
+        %% AMyPlayerController: 사용자 정의 커스텀 플레이어 컨트롤러.
+        %% MyPlayerController.h 파일에 "class YOURPROJECT_API AMyPlayerController : public APlayerController { ... };" 형태로 클래스 정의 시작.
+        <<Custom PlayerController>>
+        +AMyPlayerController() %% 생성자 함수 (.h 선언).
+        #BeginPlay() : void %% 게임 시작 시 호출 함수 (protected .h 선언).
+        #OnPossess(InPawn : APawn*) : void %% Pawn 빙의 시 호출 함수 (.h 선언). (APawn.h 포함 또는 전방 선언 필요)
+        #Server_PlayerIsReady() : void %% 클라이언트->서버 준비 완료 알림 RPC (.h 선언). <<UFUNCTION Server Reliable>> (서버 RPC).
+    }
+    AMyPlayerController --|> APlayerController
+    %% AMyPlayerController가 APlayerController를 상속. (MyPlayerController.h에 "public APlayerController" 선언, GameFramework/PlayerController.h 포함 필요)
+    AMyPlayerController ..> AMyCharacter : Possesses / Interacts With
+    %% AMyPlayerController가 AMyCharacter와 상호작용(빙의 등). (MyPlayerController.cpp 등에서 AMyCharacter 타입 사용, MyCharacter.h 포함 또는 전방 선언 필요)
