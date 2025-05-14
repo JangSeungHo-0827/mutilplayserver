@@ -1,3 +1,4 @@
+```mermaid
 classDiagram
     direction LR %% 다이어그램 방향을 왼쪽에서 오른쪽으로 설정합니다.
 
